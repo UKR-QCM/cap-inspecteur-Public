@@ -19,7 +19,7 @@ Le lot 00 compte dans les cibles : chacune de ses questions est l'une des 3 ques
 
 | Lot | Lignes ou familles couvertes | Questions visées | Statut | Livré le | « a_verifier » |
 |---|---|---|---|---|---|
-| 00-demarrage | 10 notions centrales du bloc I, 10 du II, 10 du III (détail ci-dessous) ; V.1 à V.5 | 35 | à faire | | |
+| 00-demarrage | 10 notions centrales du bloc I, 10 du II, 10 du III (détail ci-dessous) ; V.1 à V.5 | 35 | en cours | | |
 | 01-budget-centrales | Bloc I, notions centrales de I.C (lois de finances, ressources et dépenses, principes et gestion) | 36 | à faire | | |
 | 02-ue-institutions-centrales | Bloc II, notions centrales de II.A et II.B | 33 | à faire | | |
 | 03-numerique-socle-centrales | Bloc III, notions centrales de III.A | 39 | à faire | | |
