@@ -22,7 +22,7 @@ Le lot 00 compte dans les cibles : chacune de ses questions est l'une des 3 ques
 | 00-demarrage | 10 notions centrales du bloc I, 10 du II, 10 du III (détail ci-dessous) ; V.1 à V.5 | 35 | livré | 2026-10-21 | 0 |
 | 01-budget-centrales | Bloc I, notions centrales de I.C (lois de finances, ressources et dépenses, principes et gestion) | 36 | en cours | | |
 | 02-ue-institutions-centrales | Bloc II, notions centrales de II.A et II.B | 33 | en cours | | |
-| 03-numerique-socle-centrales | Bloc III, notions centrales de III.A | 39 | à faire | | |
+| 03-numerique-socle-centrales | Bloc III, notions centrales de III.A | 39 | en cours | | |
 | 04-anglais-1 | V.1, V.2, V.3 | 33 | à faire | | |
 | 05-logique-redigee | IV.R1 à IV.R6 | 48 | à faire | | |
 | 06-institutions-centrales | Bloc I, notions centrales de I.A et I.B | 41 | à faire | | |
