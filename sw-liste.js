@@ -1,5 +1,5 @@
 /* Fichier généré par outils/preparer.js — ne pas modifier à la main. Lu par sw.js. */
-self.CI_VERSION = "cd022ec8428c";
+self.CI_VERSION = "25c05111c0c2";
 self.CI_PRECACHE = [
   "./",
   "assets/js/banque.js",
@@ -17,6 +17,7 @@ self.CI_PRECACHE = [
   "assets/js/stats.js",
   "assets/js/stockage.js",
   "assets/js/utils.js",
+  "banque/lots/00-demarrage.js",
   "banque/manifest.js",
   "banque/referentiel.js"
 ];

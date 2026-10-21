@@ -2,7 +2,9 @@
 (function (racine) {
   var CI = racine.CI = racine.CI || {};
   CI.manifeste = {
-    "version": "d565bb169769",
-    "lots": []
+    "version": "decebe4bfd3a",
+    "lots": [
+      "banque/lots/00-demarrage.js"
+    ]
   };
 })(typeof window !== "undefined" ? window : globalThis);
