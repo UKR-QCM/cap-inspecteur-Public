@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cap Inspecteur — tests</title>
+<style>
+  :root { --bg: #1B1926; --surface: #25223A; --text: #F3EEFF; --text-2: #B5ADCF; --juste: #B7E8A6; --faux: #FFB5C9; }
+  body { margin: 0; padding: 16px; background: var(--bg); color: var(--text); font: 14px/1.5 system-ui, sans-serif; }
+  h1 { font-size: 20px; margin: 0 0 12px; }
+  h2 { font-size: 16px; margin: 16px 0 4px; }
+  .ok::before { content: "✓ "; color: var(--juste); }
+  .echec { color: var(--faux); }
+  .echec::before { content: "✗ "; }
+  .note, .detail { color: var(--text-2); }
+  #bilan { background: var(--surface); padding: 12px 16px; border-radius: 14px; margin-bottom: 12px; }
+  li { list-style: none; }
+  ul { padding-left: 8px; margin: 0; }
+</style>
+</head>
+<body>
+<h1>Cap Inspecteur — tests</h1>
+<div id="bilan" role="status" aria-live="polite">Tests en cours…</div>
+<div id="resultats"></div>
+
+<script src="assets/js/utils.js"></script>
+<script src="assets/js/banque.js"></script>
+<script src="banque/referentiel.js"></script>
+<script src="assets/js/srs.js"></script>
+<script src="assets/js/bareme.js"></script>
+<script src="assets/js/seance.js"></script>
+<script src="assets/js/stats.js"></script>
+<script src="assets/js/stockage.js"></script>
+<script src="assets/js/generateurs/registre.js"></script>
+<script src="assets/js/generateurs/g1-suites.js"></script>
+<script src="assets/js/generateurs/g2-alphanumeriques.js"></script>
+<script src="assets/js/generateurs/g3-nombres-manquants.js"></script>
+<script src="assets/js/generateurs/g4-probabilites.js"></script>
+<script src="assets/js/generateurs/g5-calendrier.js"></script>
+<script src="assets/js/generateurs/g6-arithmetique.js"></script>
+<script src="assets/js/generateurs/g7-codage.js"></script>
+<script src="banque/manifest.js"></script>
+<script>
+  (function () {
+    "use strict";
+    var lots = (window.CI.manifeste && window.CI.manifeste.lots) || [];
+    var annexes = ["outils/simulation.js", "outils/suites.js"];
+    var liste = lots.concat(annexes);
+    function charger(i) {
+      if (i >= liste.length) { lancer(); return; }
+      var s = document.createElement("script");
+      s.src = liste[i];
+      s.onload = function () { charger(i + 1); };
+      s.onerror = function () { document.getElementById("bilan").textContent = "Impossible de charger " + liste[i] + "."; };
+      document.body.appendChild(s);
+    }
+    function lancer() {
+      var zone = document.getElementById("resultats");
+      var ul = null;
+      setTimeout(function () {
+        var debut = Date.now();
+        var r = window.CI.tests.executer(function (e) {
+          var el;
+          if (e.type === "suite") {
+            el = document.createElement("h2"); el.textContent = e.nom; zone.appendChild(el);
+            ul = document.createElement("ul"); zone.appendChild(ul);
+          } else {
+            el = document.createElement("li");
+            el.className = e.type;
+            el.textContent = e.type === "note" ? e.message : e.nom;
+            if (e.type === "echec") {
+              var d = document.createElement("div"); d.className = "detail"; d.textContent = e.message; el.appendChild(d);
+            }
+            ul.appendChild(el);
+          }
+        });
+        document.getElementById("bilan").textContent = r.total + " tests, " + r.echecs.length + " échec(s) — " +
+          ((Date.now() - debut) / 1000).toFixed(1) + " s — banque : " + window.CI.banque.toutes().length + " question(s).";
+        document.getElementById("bilan").className = r.echecs.length ? "echec" : "ok";
+      }, 0);
+    }
+    charger(0);
+  })();
+</script>
+</body>
+</html>

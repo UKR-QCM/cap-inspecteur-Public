@@ -120,7 +120,8 @@ Item :
   doute: false,
   barres: [],                     // indices d'origine barrés (effet visuel)
   temps: 0,                       // secondes passées sur la question
-  remplace: "Q-…"                 // facultatif : question sœur qui remplace une révision en erreur
+  remplace: "Q-…",                // facultatif : question sœur qui remplace une révision en erreur
+  corrige: true                   // facultatif : déjà corrigée (entraînement libre en correction immédiate)
 }
 ```
 
@@ -301,8 +302,10 @@ Contexte (`CI.seance.contexte(etat, jour, maintenant)` le construit à partir de
 | `abandonner(etat, seanceId, maintenant)` | statut « abandonnee », aucune modification de mémoire |
 | `fileRevisions(ctx)` | révisions dues hors séance du jour et rattrapage, triées par priorité : `[Item]` |
 | `prochaineRevision(ctx)` | **modifie `ctx.etat.revisions`** : item courant des révisions du jour (stable au rechargement) ou null |
-| `repondreImmediat(ctx, item, reponse, source, seanceId?)` | **modifie `ctx.etat`** : correction immédiate (révisions du jour, entraînement libre). Renvoie `{ code, bonne, question }`. |
+| `repondreImmediat(ctx, seanceId, index, reponse)` | **modifie `ctx.etat`** : correction immédiate d'une question d'entraînement libre (mémoire mise à jour si `options.memoire`). Renvoie `{ code, bonne, question }`. |
+| `repondreRevision(ctx, reponse)` | **modifie `ctx.etat`** : répond à l'item courant des révisions du jour, met à jour la mémoire et l'historique. Renvoie `{ code, bonne, question, resorbee }`. |
 | `seancesEnCours(etat)` | séances non validées et non abandonnées |
+| `PARAMETRES` | `{ soeurs: true, soeursDejaVues: true }` (voir § 6) |
 
 ### 4.6 `CI.stats`
 
@@ -319,7 +322,6 @@ Contexte (`CI.seance.contexte(etat, jour, maintenant)` le construit à partir de
 | `notionsFragiles(referentiel, questions, etat, n)` | notions fragiles les plus touchées |
 | `plusRatees(etat, n)` | questions les plus ratées |
 | `projection(referentiel, questions, etat, jour, dateConcours)` | % des notions disponibles vues au concours au rythme des 14 derniers jours |
-| `fileParJour(etat)` | historique de la file restante (calculée) |
 
 ### 4.7 `CI.stockage`
 
@@ -366,6 +368,9 @@ Voir `banque/referentiel.js` : `blocs`, `lignes`, `notions`, `familles`, `crcnEx
 - « Vue dans les 3 derniers jours » : dernière réponse il y a 0, 1 ou 2 jours.
 - Complément d'un bloc : places de révision → révisions dues par priorité ; puis nouvelles ; s'il manque des nouvelles, d'abord les autres révisions dues, puis les révisions non dues (b le plus petit, puis la plus anciennement vue).
 - Question sœur : la question remplacée garde son échéance, et son compteur `retoursErreur` augmente de 1 à la validation, pour qu'elle revienne elle-même la fois suivante (sinon elle serait remplacée indéfiniment).
+- Question sœur : seulement une question **déjà vue** et non maîtrisée (la spécification autorisait aussi une question nouvelle). Avec des sœurs nouvelles, la simulation sur 90 jours dépasse la limite de 120 (jusqu'à 226 selon le tirage) ; avec des sœurs déjà vues, elle reste sous 100. Réglage : `CI.seance.PARAMETRES.soeursDejaVues`.
+- Dernier recours d'un bloc (banque trop petite) : toute question non choisie, hors vues récentes et hors niveau 3 nouveau pendant les 7 jours qui suivent le positionnement ; si rien ne convient, le bloc compte moins de questions.
+- Fenêtre « 7 jours qui suivent le positionnement » : jusqu'à 7 jours après le jour du test inclus.
 - Bloc IV : les places de révision vont aux questions rédigées dues ; les autres places reçoivent au plus 2 nouvelles rédigées, puis des questions générées (familles dues d'abord, puis la moins récemment vue ; au plus 2 par famille). Une question générée compte comme nouvelle.
 - File restante de la veille : révisions (questions et familles éligibles) dues au plus tard la veille et toujours dues à la première ouverture du jour. Aucun état de mémoire → premier jour (3 et 1).
 - Calibrage « à la limite » : taux de réussite à moins de 5 points du seuil.
